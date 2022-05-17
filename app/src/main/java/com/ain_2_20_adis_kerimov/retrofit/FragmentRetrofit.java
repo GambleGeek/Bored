@@ -1,4 +1,4 @@
-package com.example.retrofit;
+package com.ain_2_20_adis_kerimov.retrofit;
 
 import android.os.Bundle;
 import androidx.fragment.app.Fragment;
@@ -9,19 +9,16 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.retrofit.databinding.FragmentRetrofitBinding;
-
-import org.w3c.dom.Text;
+import com.ain_2_20_adis_kerimov.retrofit.databinding.ActivityMainBinding;
+import com.ain_2_20_adis_kerimov.retrofit.databinding.FragmentRetrofitBinding;
 
 import java.io.IOException;
-import java.util.List;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 
 public class FragmentRetrofit extends Fragment {
 
@@ -46,6 +43,7 @@ public class FragmentRetrofit extends Fragment {
         type = binding.type;
         link = binding.link;
         price = binding.price;
+        favourite = binding.like;
     }
 
     public void clickListen(){
@@ -58,7 +56,13 @@ public class FragmentRetrofit extends Fragment {
     }
 
     public void createActivity(){
-        Call<Activity> call = RetrofitClass.getInstance().getActivity();
+//        Retrofit retrofit = new retrofit2.Retrofit.Builder()
+//                .baseUrl("https://www.boredapi.com/api/")
+//                .addConverterFactory(GsonConverterFactory.create())
+//                .build();
+        Retrofit retrofit = RetrofitClass.getRetrofit();
+        JsonPlaceHolderApi jsonPlaceHolderApi = retrofit.create(JsonPlaceHolderApi.class);
+        Call<Activity> call = jsonPlaceHolderApi.getActivity();
         call.enqueue(new Callback<Activity>() {
             @Override
             public void onResponse(Call<Activity> call, Response<Activity> response) {
@@ -70,13 +74,16 @@ public class FragmentRetrofit extends Fragment {
                     type.setText(activity.getType());
                     link.setText(activity.getLink());
                     price.setText(activity.getPrice() + "$");
+                    Toast.makeText(requireContext(), "Success!", Toast.LENGTH_SHORT).show();
                 } else {
                     switch(response.code()) {
                         case 404:
                             // страница не найдена. можно использовать ResponseBody, см. ниже
+                            Toast.makeText(requireContext(), "Page not found!", Toast.LENGTH_SHORT).show();
                             break;
                         case 500:
                             // ошибка на сервере. можно использовать ResponseBody, см. ниже
+                            Toast.makeText(requireContext(), "Error!", Toast.LENGTH_SHORT).show();
                             break;
                     }
                     // или
@@ -96,3 +103,4 @@ public class FragmentRetrofit extends Fragment {
     }
 
 }
+

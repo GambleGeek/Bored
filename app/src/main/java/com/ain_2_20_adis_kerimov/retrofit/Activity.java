@@ -1,4 +1,4 @@
-package com.example.retrofit;
+package com.ain_2_20_adis_kerimov.retrofit;
 
 import com.google.gson.annotations.SerializedName;
 
@@ -10,7 +10,7 @@ public class Activity {
 
     private int participants;
 
-    private Double price;
+    private int price;
 
     private String link;
 
@@ -30,7 +30,7 @@ public class Activity {
         return participants;
     }
 
-    public Double getPrice() {
+    public int getPrice() {
         return price;
     }
 
